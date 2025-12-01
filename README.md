@@ -5,8 +5,6 @@
 
 An [mdformat](https://github.com/executablebooks/mdformat) plugin that applies [EditorConfig](https://editorconfig.org/) indentation settings to Markdown formatting.
 
-> **Status: Work in Progress** - This plugin is under active development.
-
 ## Motivation
 
 mdformat uses opinionated defaults for indentation (2 spaces). This plugin allows you to configure indentation via `.editorconfig` files, making mdformat respect your project's or personal indentation preferences.
@@ -43,12 +41,65 @@ Then format your Markdown files as usual:
 mdformat your-file.md
 ```
 
+### Example
+
+With the above `.editorconfig`, nested lists will use 4-space indentation:
+
+**Before:**
+```markdown
+- Item 1
+  - Nested item
+- Item 2
+```
+
+**After:**
+```markdown
+- Item 1
+    - Nested item
+- Item 2
+```
+
 ### Supported Properties
 
 | Property | Values | Description |
 |----------|--------|-------------|
 | `indent_style` | `space`, `tab` | Type of indentation |
 | `indent_size` | integer | Number of columns per indentation level |
+
+## How It Works
+
+The plugin overrides mdformat's list renderers to apply indentation settings from `.editorconfig` files. It:
+
+1. Looks up `.editorconfig` settings for the file being formatted
+2. Reads `indent_style` and `indent_size` properties
+3. Applies the configured indentation to list continuation lines and nested content
+
+### File Context
+
+For the plugin to read `.editorconfig` settings, it needs to know the file path being formatted. When using the Python API directly with `mdformat.text()`, you can set the file context:
+
+```python
+import mdformat
+from mdformat_editorconfig import set_current_file
+
+# Set the file context for editorconfig lookup
+set_current_file("/path/to/your/file.md")
+try:
+    result = mdformat.text(markdown_text, extensions={"editorconfig"})
+finally:
+    set_current_file(None)
+```
+
+When no file context is set, the plugin passes through to mdformat's default behavior (2-space indentation).
+
+## Scope
+
+This plugin currently handles indentation for:
+
+- Bullet lists (unordered lists)
+- Ordered lists
+
+Code blocks and blockquotes follow CommonMark standard formatting (4-space indentation for indented code blocks).
 
 ## Development
 
