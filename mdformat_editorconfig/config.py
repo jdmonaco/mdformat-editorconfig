@@ -37,18 +37,23 @@ def get_current_file() -> Path | None:
 def get_indent_config() -> tuple[str, int] | None:
     """Get indent configuration from .editorconfig for the current file.
 
-    Looks up the current file's .editorconfig settings and returns
-    the indent_style and indent_size if configured.
+    Looks up .editorconfig settings for the current file. If no file path
+    is explicitly set (via set_current_file), falls back to using the
+    current working directory for editorconfig lookup. This enables CLI
+    usage when running mdformat from a project directory.
 
     Returns:
         Tuple of (indent_style, indent_size) where:
         - indent_style: "space" or "tab"
         - indent_size: number of columns per indent level
-        Returns None if no file is set or no indent config found.
+        Returns None if no indent config found.
     """
     filepath = _current_file.get()
+
+    # Fallback to cwd for CLI usage - use a synthetic .md file path
+    # to ensure markdown-specific editorconfig sections are matched
     if filepath is None:
-        return None
+        filepath = Path.cwd() / "_.md"
 
     try:
         props = editorconfig.get_properties(str(filepath))

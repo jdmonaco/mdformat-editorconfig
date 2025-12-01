@@ -70,13 +70,30 @@ With the above `.editorconfig`, nested lists will use 4-space indentation:
 
 The plugin overrides mdformat's list renderers to apply indentation settings from `.editorconfig` files. It:
 
-1. Looks up `.editorconfig` settings for the file being formatted
+1. Looks up `.editorconfig` settings based on the current working directory
 2. Reads `indent_style` and `indent_size` properties
 3. Applies the configured indentation to list continuation lines and nested content
 
-### File Context
+### CLI Usage
 
-For the plugin to read `.editorconfig` settings, it needs to know the file path being formatted. When using the Python API directly with `mdformat.text()`, you can set the file context:
+When using mdformat from the command line, the plugin looks up `.editorconfig` settings based on your **current working directory**. This means:
+
+- Run mdformat from your project root to pick up project-level `.editorconfig`
+- A global `~/.editorconfig` (with `root = true`) will apply to all mdformat calls within your home directory
+
+```bash
+# Run from project root to use project's .editorconfig
+cd /path/to/project
+mdformat docs/*.md
+```
+
+### Limitation
+
+Due to mdformat's plugin architecture, the plugin cannot determine the actual file path being formatted. Instead, it uses the current working directory for `.editorconfig` lookup. This works well for the common case of running mdformat from a project root, but may not pick up the correct settings if you format files from a different directory.
+
+### Python API
+
+When using the Python API directly, you can explicitly set the file context for more precise `.editorconfig` lookup:
 
 ```python
 import mdformat
@@ -89,8 +106,6 @@ try:
 finally:
     set_current_file(None)
 ```
-
-When no file context is set, the plugin passes through to mdformat's default behavior (2-space indentation).
 
 ## Scope
 

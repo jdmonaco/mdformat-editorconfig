@@ -170,8 +170,46 @@ class TestNoEditorConfig:
         result = format_with_context(input_text, md_file)
         assert result == expected
 
-    def test_passthrough_without_context(self):
-        """Without file context set, use mdformat defaults."""
+
+class TestCwdFallback:
+    """Tests for cwd-based fallback when no file context is set."""
+
+    def test_uses_cwd_editorconfig(self, temp_project, monkeypatch):
+        """Without file context, should use .editorconfig from cwd."""
+        create_editorconfig(
+            temp_project,
+            """
+root = true
+
+[*.md]
+indent_style = space
+indent_size = 4
+""",
+        )
+
+        # Change to temp_project directory
+        monkeypatch.chdir(temp_project)
+
+        # Clear any existing file context
+        set_current_file(None)
+
+        input_text = """\
+- Item 1
+  - Nested item
+- Item 2
+"""
+        expected = """\
+- Item 1
+    - Nested item
+- Item 2
+"""
+        result = mdformat.text(input_text, extensions={"editorconfig"})
+        assert result == expected
+
+    def test_fallback_without_editorconfig(self, temp_project, monkeypatch):
+        """Without .editorconfig in cwd, use mdformat defaults."""
+        # No .editorconfig file created
+        monkeypatch.chdir(temp_project)
         set_current_file(None)
 
         input_text = """\
@@ -179,6 +217,7 @@ class TestNoEditorConfig:
     - Nested item
 - Item 2
 """
+        # mdformat default is 2-space indentation
         expected = """\
 - Item 1
   - Nested item

@@ -1,5 +1,6 @@
 # Dev files
 dev/
+.claude/
 
 # Python
 __pycache__/
