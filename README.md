@@ -59,12 +59,19 @@ With the above `.editorconfig`, nested lists will use 4-space indentation:
 - Item 2
 ```
 
-### Supported Properties
+### EditorConfig Property Compatibility
 
-| Property | Values | Description |
-|----------|--------|-------------|
-| `indent_style` | `space`, `tab` | Type of indentation |
-| `indent_size` | integer | Number of columns per indentation level |
+| Property | Status | Notes |
+|----------|--------|-------|
+| `indent_style` | ✅ Supported | Plugin applies space/tab indentation to lists |
+| `indent_size` | ✅ Supported | Plugin applies configured indent width to lists |
+| `trim_trailing_whitespace` | ✅ Always enabled | mdformat always trims trailing whitespace by design |
+| `insert_final_newline` | ✅ Always enabled | mdformat always adds final newline by design |
+| `end_of_line` | ⚪ See mdformat | Use mdformat's `--end-of-line` CLI option (`lf`, `crlf`) |
+| `tab_width` | ⚪ Inherited | Used when `indent_size = tab` |
+| `charset` | ⚪ N/A | File encoding is handled by editors, not formatters |
+
+**Note:** mdformat has opinionated defaults that align well with typical `.editorconfig` settings. The formatter always trims trailing whitespace and ensures files end with a newline—these behaviors cannot be disabled.
 
 ## How It Works
 

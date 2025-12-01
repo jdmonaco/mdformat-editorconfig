@@ -1,6 +1,6 @@
 """An mdformat plugin for applying .editorconfig indentation settings."""
 
-__version__ = "0.1.1"
+__version__ = "0.1.2"
 
 from mdformat_editorconfig.config import (
     get_current_file,
