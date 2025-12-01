@@ -1,64 +1,54 @@
-# mdformat-tight-lists
+# mdformat-editorconfig
 
 [![Build Status][ci-badge]][ci-link]
 [![PyPI version][pypi-badge]][pypi-link]
 
-An [mdformat](https://github.com/executablebooks/mdformat) plugin that formats Markdown lists to be tight (no empty lines between list items) following mdformat-style rules.
+An [mdformat](https://github.com/executablebooks/mdformat) plugin that applies [EditorConfig](https://editorconfig.org/) indentation settings to Markdown formatting.
+
+> **Status: Work in Progress** - This plugin is under active development.
+
+## Motivation
+
+mdformat uses opinionated defaults for indentation (2 spaces). This plugin allows you to configure indentation via `.editorconfig` files, making mdformat respect your project's or personal indentation preferences.
 
 ## Installation
 
 ```bash
-pip install mdformat-tight-lists
+pip install mdformat-editorconfig
 ```
 
 Or with [pipx](https://pipx.pypa.io/) for command-line usage:
 
 ```bash
 pipx install mdformat
-pipx inject mdformat mdformat-tight-lists
+pipx inject mdformat mdformat-editorconfig
 ```
 
 ## Usage
 
-After installation, mdformat will automatically use this plugin when formatting Markdown files:
+Create an `.editorconfig` file in your project (or home directory):
+
+```ini
+# .editorconfig
+root = true
+
+[*.md]
+indent_style = space
+indent_size = 4
+```
+
+Then format your Markdown files as usual:
 
 ```bash
 mdformat your-file.md
 ```
 
-### Features
+### Supported Properties
 
-- **Smart List Formatting**: Automatically creates tight lists by removing unnecessary empty lines
-- **List Type Detection**: Different top-level markers (`-`, `*`, `+`) are treated as separate lists
-- **Nested List Handling**: Properly handles transitions between ordered and unordered lists
-- **Multi-Paragraph Support**: Preserves loose formatting when list items contain multiple paragraphs
-
-### Examples
-
-**Input:**
-```markdown
-- Item 1
-
-- Item 2
-
-- Item 3
-```
-
-**Output:**
-```markdown
-- Item 1
-- Item 2
-- Item 3
-```
-
-**Multi-paragraph items (loose list preserved):**
-```markdown
-- First item with multiple paragraphs
-
-  Second paragraph of first item
-
-- Second item
-```
+| Property | Values | Description |
+|----------|--------|-------------|
+| `indent_style` | `space`, `tab` | Type of indentation |
+| `indent_size` | integer | Number of columns per indentation level |
 
 ## Development
 
@@ -66,8 +56,8 @@ mdformat your-file.md
 
 ```bash
 # Clone the repository
-git clone https://github.com/jdmonaco/mdformat-tight-lists.git
-cd mdformat-tight-lists
+git clone https://github.com/jdmonaco/mdformat-editorconfig.git
+cd mdformat-editorconfig
 
 # Install development environment with uv
 uv sync
@@ -80,25 +70,17 @@ uv sync
 uv run pytest
 
 # Run with coverage
-uv run pytest --cov=mdformat_tight_lists
+uv run pytest --cov=mdformat_editorconfig
 
 # Run tests verbosely
 uv run pytest -v
 ```
 
-### Adding Tests
-
-To add new test cases, edit `tests/fixtures.md` following the existing format:
-- Test title
-- Input markdown (between dots)
-- Expected output (between dots)
-
 ## License
 
 MIT - see LICENSE file for details.
 
-[ci-badge]: https://github.com/jdmonaco/mdformat-tight-lists/workflows/CI/badge.svg
-[ci-link]: https://github.com/jdmonaco/mdformat-tight-lists/actions?query=workflow%3ACI+branch%3Amain+event%3Apush
-[pypi-badge]: https://img.shields.io/pypi/v/mdformat-tight-lists.svg
-[pypi-link]: https://pypi.org/project/mdformat-tight-lists
-
+[ci-badge]: https://github.com/jdmonaco/mdformat-editorconfig/workflows/CI/badge.svg
+[ci-link]: https://github.com/jdmonaco/mdformat-editorconfig/actions?query=workflow%3ACI+branch%3Amain+event%3Apush
+[pypi-badge]: https://img.shields.io/pypi/v/mdformat-editorconfig.svg
+[pypi-link]: https://pypi.org/project/mdformat-editorconfig

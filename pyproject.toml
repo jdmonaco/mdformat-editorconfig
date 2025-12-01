@@ -3,13 +3,13 @@ requires = ["flit_core >=3.2.0,<4"]
 build-backend = "flit_core.buildapi"
 
 [project]
-name = "mdformat_tight_lists"
+name = "mdformat_editorconfig"
 authors = [
     { name = "Joseph Monaco", email = "joe@selfmotion.net" },
 ]
 readme = "README.md"
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 3 - Alpha",
     "Intended Audience :: Developers",
     "License :: OSI Approved :: MIT License",
     "Programming Language :: Python :: 3",
@@ -20,30 +20,29 @@ classifiers = [
     "Topic :: Software Development :: Libraries :: Python Modules",
     "Topic :: Text Processing :: Markup :: Markdown",
 ]
-keywords = ["mdformat", "markdown", "markdown-it", "formatter", "lists"]
+keywords = ["mdformat", "markdown", "formatter", "editorconfig", "indentation"]
 requires-python = ">=3.10"
 dependencies = [
     "mdformat>=0.7.0",
-    "mdformat-frontmatter>=2.0.0",
-    "pytest>=8.4.1",
+    "editorconfig>=0.12.0",
 ]
 dynamic = ["version", "description"]
 
 [project.optional-dependencies]
 test = [
-    "pytest>=7.0",
+    "pytest>=8.4.1",
     "pytest-cov>=4.0",
 ]
 
 [project.urls]
-Homepage = "https://github.com/jdmonaco/mdformat-tight-lists"
+Homepage = "https://github.com/jdmonaco/mdformat-editorconfig"
 
 [project.entry-points."mdformat.parser_extension"]
-tight_lists = "mdformat_tight_lists"
+editorconfig = "mdformat_editorconfig"
 
 [tool.flit.sdist]
 include = []
-exclude = [".github/", "tests/"]
+exclude = [".github/", "tests/", "dev/"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
